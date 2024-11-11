@@ -20,5 +20,5 @@ Obligatorio de Lucas Arbelo (300805) y Francisco Rodriguez (299896)
 ### Elección de aplicativo de Front End:
     React, ambos tenemos experiencia gracias al taller FE dictado en la carrera, más allá de que no tendremos necesidad de manipular código.
 ### Elección de servicio Serverless:
-    (en progreso...) 
+    (en mucho progreso...) 
 
