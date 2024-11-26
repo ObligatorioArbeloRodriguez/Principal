@@ -9,4 +9,14 @@ COPY . .
 
 RUN mvn clean package -DskipTests
 
+# PASO 2: Ejecutar la aplicacion. NO SE SI LO NECESITO AHORA.
+FROM eclipse-temurin:21-alpine
+
+WORKDIR /app/$APP_NAME
+
+# Copy el build que creamos antes en el paso 1, al que le pusimos builder.
+COPY --from=builder /app/$APP_NAME/target/*.jar app.jar
+
+# Ejecuta el archivo .JAR
+CMD ["java", "-jar", "app.jar"]
 
