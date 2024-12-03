@@ -23,6 +23,6 @@ Obligatorio de Lucas Arbelo (300805) y Francisco Rodriguez (299896)
     (en progreso...) 
 
 Pasando por los test de selenium para el aplicativo FE, se pasa el control por el Pipeline de GH Actions, para luego ser desplegado en la parte de deploy
-![selenium pipeline]()
+![selenium pipeline](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/selenium%20pipeline.jpg)
 y la parte de código 
-![selenium código]()
+![selenium código](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/selenium%20test.png)
