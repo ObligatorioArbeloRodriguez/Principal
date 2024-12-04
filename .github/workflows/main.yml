@@ -14,10 +14,9 @@ on:
             description: "Nombre que va a tener la imagen Docker al buildear"
             required: true
             type: string
+      secrets:
         SONAR_TOKEN:
-            description: "Sonar Token de cada proyecto"
-            required: true
-            type: string
+          required: true
         
             
 jobs:
@@ -48,13 +47,13 @@ jobs:
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
-          SONAR_TOKEN: ${{ inputs.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=${{ inputs.sonar_project_key }}
       - name: Análisis de SonarCloud Quality Gate
         env:
-          SONAR_TOKEN: ${{ inputs.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          STATUS=$(curl -s -u "${{inputs.SONAR_TOKEN}}:" "https://sonarcloud.io/api/qualitygates/project_status?projectKey=${{ inputs.sonar_project_key }}" | jq -r '.projectStatus.status')
+          STATUS=$(curl -s -u "${{secrets.SONAR_TOKEN}}:" "https://sonarcloud.io/api/qualitygates/project_status?projectKey=${{ inputs.sonar_project_key }}" | jq -r '.projectStatus.status')
           echo "Quality Gate Status: $STATUS"
           if [ "$STATUS" != "OK" ]; then
             echo "Quality Gate falló."
