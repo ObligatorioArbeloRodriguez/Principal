@@ -26,13 +26,12 @@ resource "aws_api_gateway_resource" "products" {
   path_part   = "products"
 }
 
-#Asocia cada recurso con un matodo HTTP. REVISAR PORQUE TENEMOS ALGUN POST
 
 resource "aws_api_gateway_method" "orders" {
   rest_api_id   = aws_api_gateway_rest_api.main.id
   resource_id   = aws_api_gateway_resource.orders.id
-  http_method   = "GET"
-  authorization = "NONE" # Cambia a "AWS_IAM" o "COGNITO_USER_POOLS" si necesitas autorización.
+  http_method   = "POST"
+  authorization = "NONE" 
 }
 
 resource "aws_api_gateway_method" "shipping" {
@@ -56,7 +55,7 @@ resource "aws_api_gateway_method" "products" {
   authorization = "NONE"
 }
 
-#Integramos la API Gateway con  cada Ms mediante el Load Balancer.
+#Aca integramos la API Gateway con cada Ms mediante el Load Balancer.
 
 resource "aws_api_gateway_integration" "orders" {
   rest_api_id             = aws_api_gateway_rest_api.main.id

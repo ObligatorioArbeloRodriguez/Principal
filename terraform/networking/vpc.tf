@@ -18,8 +18,6 @@ data "aws_availability_zones" "available" {
   state = "available"
 }
 
-#AGREGADO
-
 resource "aws_subnet" "main" {
   count           = 2
   vpc_id          = aws_vpc.main.id
@@ -29,10 +27,9 @@ resource "aws_subnet" "main" {
     Name = "privada-subnet-${count.index}"
   }
 }
-#AGREGADO
 
 resource "aws_subnet" "public" {
-  count                  = length(var.public_subnet_cidr) #modificado para intentar arreglar la discrepancia del valor del index de linea 28.
+  count                  = length(var.public_subnet_cidr)
   vpc_id                 = aws_vpc.main.id
   cidr_block             = var.public_subnet_cidr[count.index]
   availability_zone      = data.aws_availability_zones.available.names[count.index]

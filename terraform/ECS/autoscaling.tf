@@ -17,7 +17,7 @@ resource "aws_appautoscaling_policy" "scaling_orders" {
   service_namespace  = "ecs"
 
   target_tracking_scaling_policy_configuration {
-    target_value = 50.0  # Ajusta según el objetivo deseado
+    target_value = 50.0 
     predefined_metric_specification {
       predefined_metric_type = "ECSServiceAverageCPUUtilization"
     }
@@ -54,7 +54,6 @@ resource "aws_appautoscaling_policy" "scaling_products" {
   }
 }
 
-# Auto Scaling Target y Policy para Shipping
 resource "aws_appautoscaling_target" "shipping" {
   max_capacity       = 10
   min_capacity       = 1
@@ -82,7 +81,6 @@ resource "aws_appautoscaling_policy" "scaling_shipping" {
   }
 }
 
-# Auto Scaling Target y Policy para Payments
 resource "aws_appautoscaling_target" "payments" {
   max_capacity       = 10
   min_capacity       = 1
