@@ -7,7 +7,7 @@ resource "aws_security_group" "ecs" {
     to_port     = 8080
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-    security_groups = [aws_security_group.lb.id] # Permitir tráfico desde el ALB
+    security_groups = [aws_security_group.lb.id]
   }
 
   egress {
@@ -18,7 +18,6 @@ resource "aws_security_group" "ecs" {
   }
 }
 
-#Security group para load balancer.
 
 resource "aws_security_group" "lb" {
   name   = "lb-sg"
