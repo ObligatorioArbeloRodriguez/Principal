@@ -1,0 +1,143 @@
+name: Pipeline principal reutilizable para aplicativos backend
+on:
+    workflow_call:
+      inputs:
+        app_name:
+          description: 'Nombre de la aplicación que "llamó" al pipeline'
+          required: true
+          type: string
+        sonar_project_key:
+          description: 'Clave del proyecto en SonarCloud'
+          required: true
+          type: string
+        docker_image_name: 
+            description: "Nombre que va a tener la imagen Docker al buildear"
+            required: true
+            type: string
+        
+            
+jobs:
+  sonarcloud:
+    name: Sonarcloud
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'zulu' # 
+      - name: Cache SonarQube Cloud packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=${{ inputs.sonar_project_key }}
+      - name: Análisis de SonarCloud Quality Gate
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          STATUS=$(curl -s -u "${SONAR_TOKEN}:" "https://sonarcloud.io/api/qualitygates/project_status?projectKey=${{ inputs.sonar_project_key }}" | jq -r '.projectStatus.status')
+          echo "Quality Gate Status: $STATUS"
+          if [ "$STATUS" != "OK" ]; then
+            echo "Quality Gate falló."
+            exit 1
+          fi
+          echo "El quality gate fue pasado con éxito"
+  docker_build_and_push:
+    needs: sonarcloud
+    name: Build de container docker
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Download Dockerfile from Principal repository
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -H "Authorization: Bearer $GITHUB_TOKEN" \
+               -H "Accept: application/vnd.github.v3.raw" \
+               -o Dockerfile \
+               https://api.github.com/repos/ObligatorioArbeloRodriguez/Principal/Dockerfile
+      - name: Buildear imagen con nombre recibido
+        run: |
+            docker build --build-arg APP_NAME=${{ inputs.app_name }} -t ${{ inputs.docker_image_name }}
+      - name: Configurar credenciales para AWS
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+            aws-region: ${{ secrets.AWS_REGION }}
+      - name: Autenticarse en ECR
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Ponerle tag a imagen de Docker antes de subirla al repo de ECR
+        run: |
+              REPO_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.app_name }}"
+              docker tag ${{ inputs.docker_image_name }}:latest $REPO_URI:latest
+              echo "La imagen quedó con el siguiente tag: $REPO_URI:latest"
+      - name: Pushear imagen docker a ECR
+        run: |
+              REPO_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.app_name }}"
+              docker push $REPO_URI:latest
+
+  deploy_to_dev:
+    needs: docker_build_and_push
+    name: Hacer deploy a cluster de ambiente DEV
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Actualizar servicio ECS en el cluster DEV
+        run: |
+          CLUSTER_NAME=${{ inputs.ecs_cluster_name_dev }}
+          SERVICE_NAME=${{ inputs.ecs_service_name_dev }}
+          IMAGE_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.app_name }}:latest"
+          aws ecs update-service \
+            --cluster $CLUSTER_NAME \
+            --service $SERVICE_NAME \
+            --force-new-deployment \
+            --image $IMAGE_URI
+
+  deploy_to_test:
+    needs: deploy_to_dev
+    name: Hacer deploy a cluster de ambiente TEST
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Actualizar servicio ECS en el cluster TEST
+        run: |
+          CLUSTER_NAME=${{ inputs.ecs_cluster_name_test }}
+          SERVICE_NAME=${{ inputs.ecs_service_name_test }}
+          IMAGE_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.app_name }}:latest"
+          aws ecs update-service \
+            --cluster $CLUSTER_NAME \
+            --service $SERVICE_NAME \
+            --force-new-deployment \
+            --image $IMAGE_URI
+
+  deploy_to_prod:
+    needs: deploy_to_test
+    name: Deploy a cluster de ambiente PROD
+    runs-on: ubuntu-24.04
+    environment: 
+      name: production
+    steps:
+      - name: Update ECS service in Prod cluster
+        run: |
+          CLUSTER_NAME=${{ inputs.ecs_cluster_name_prod }}
+          SERVICE_NAME=${{ inputs.ecs_service_name_prod }}
+          IMAGE_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.app_name }}:latest"
+          aws ecs update-service \
+            --cluster $CLUSTER_NAME \
+            --service $SERVICE_NAME \
+            --force-new-deployment \
+            --image $IMAGE_URI  
