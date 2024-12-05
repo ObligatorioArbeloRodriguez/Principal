@@ -74,23 +74,11 @@ jobs:
                       -H "Accept: application/vnd.github.v3.raw" \
                       -o Dockerfile \
                       https://raw.githubusercontent.com/ObligatorioArbeloRodriguez/Principal/main/Dockerfile
-
-# probe con el dockerfile pasando a json:  DA mismo ERROR
-# https://api.github.com/repos/ObligatorioArbeloRodriguez/Principal/Dockerfile esto es lo que estaba antes, daba 404 not found ya que estabamos intentando tomar el DOCKERFILE como JSON
-
-# vi en internet que hay otra manera que seria haciendo un clone y tomando solo lo que se necesita, en este caso se haria:
-# git clone https://github.com/ObligatorioArbeloRodriguez/Principal.git
-#   cp Principal/Dockerfile .
-
-# codigo anterior:
- # | 
- # git clone https://github.com/ObligatorioArbeloRodriguez/Principal.git
- # cp Principal/Dockerfile .
             
       
       - name: Buildear imagen con nombre recibido
         run: |
-            docker build --build-arg APP_NAME=${{ inputs.app_name }} -t ${{ inputs.docker_image_name }} .
+            docker build -t ${{ inputs.docker_image_name }} .
       - name: Configurar credenciales para AWS
         uses: aws-actions/configure-aws-credentials@v1
         with:
