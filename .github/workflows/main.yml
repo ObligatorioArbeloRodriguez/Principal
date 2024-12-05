@@ -14,6 +14,10 @@ on:
             description: "Nombre que va a tener la imagen Docker al buildear"
             required: true
             type: string
+        nombre_repo:
+            description: "nombre del repo que llama al workflow"
+            required: true
+            type: string
       secrets:
         SONAR_TOKEN:
           required: true
@@ -74,7 +78,11 @@ jobs:
                       -H "Accept: application/vnd.github.v3.raw" \
                       -o Dockerfile \
                       https://raw.githubusercontent.com/ObligatorioArbeloRodriguez/Principal/main/Dockerfile
-            
+
+      - name: Clonar repo origen
+        run: |
+             git clone https://github.com/ObligatorioArbeloRodriguez/${{inputs.nombre_repo}}.git
+             cd ${{inputs.nombre_repo}} 
       
       - name: Buildear imagen con nombre recibido
         run: |
