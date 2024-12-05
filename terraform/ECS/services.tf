@@ -1,5 +1,5 @@
 resource "aws_ecs_service" "orders" {
-  name            = "orders-service-${var.environment}"
+  name            = "be-orders-service-${var.environment}"
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.orders.arn
   desired_count   = 5
@@ -28,7 +28,7 @@ resource "aws_ecs_service" "orders" {
 }
 
 resource "aws_ecs_service" "payments" {
-  name            = "payments-service-${var.environment}"
+  name            = "be-payments-service-${var.environment}"
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.payments.arn
   desired_count   = 5
@@ -57,7 +57,7 @@ resource "aws_ecs_service" "payments" {
 }
 
 resource "aws_ecs_service" "shipping" {
-  name            = "shipping-service-${var.environment}"
+  name            = "be-shipping-service-${var.environment}"
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.shipping.arn
   desired_count   = 5
@@ -86,7 +86,7 @@ resource "aws_ecs_service" "shipping" {
 }
 
 resource "aws_ecs_service" "products" {
-  name            = "products-service-${var.environment}"
+  name            = "be-products-service-${var.environment}"
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.products.arn
   desired_count   = 5
