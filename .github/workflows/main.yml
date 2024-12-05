@@ -70,23 +70,24 @@ jobs:
     name: Build de container docker
     runs-on: ubuntu-24.04
     steps:
+
+      - name: Clonar repo origen
+        run: | 
+             git clone https://github.com/ObligatorioArbeloRodriguez/${{inputs.nombre_repo}}.git
+
       - name: Download Dockerfile from Principal repository
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+                cd ${{inputs.nombre_repo}}
                  curl -H "Authorization: Bearer $GITHUB_TOKEN" \
                       -H "Accept: application/vnd.github.v3.raw" \
                       -o Dockerfile \
                       https://raw.githubusercontent.com/ObligatorioArbeloRodriguez/Principal/main/Dockerfile
 
-      - name: Clonar repo origen
-        run: | 
-             git clone https://github.com/ObligatorioArbeloRodriguez/${{inputs.nombre_repo}}.git
-             ls -la
-             cd ${{inputs.nombre_repo}} 
-      
       - name: Buildear imagen con nombre recibido
         run: |
+            cd ${{inputs.nombre_repo}}
             docker build -t ${{ inputs.docker_image_name }} .
       - name: Configurar credenciales para AWS
         uses: aws-actions/configure-aws-credentials@v1
