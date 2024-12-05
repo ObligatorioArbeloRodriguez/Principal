@@ -80,8 +80,9 @@ jobs:
                       https://raw.githubusercontent.com/ObligatorioArbeloRodriguez/Principal/main/Dockerfile
 
       - name: Clonar repo origen
-        run: |
+        run: | 
              git clone https://github.com/ObligatorioArbeloRodriguez/${{inputs.nombre_repo}}.git
+             ls -la
              cd ${{inputs.nombre_repo}} 
       
       - name: Buildear imagen con nombre recibido
