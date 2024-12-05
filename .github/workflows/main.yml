@@ -49,7 +49,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=${{inputs.sonar_project_key}}
-        
+
       - name: Análisis de SonarCloud Quality Gate
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -76,7 +76,7 @@ jobs:
                https://api.github.com/repos/ObligatorioArbeloRodriguez/Principal/Dockerfile
       - name: Buildear imagen con nombre recibido
         run: |
-            docker build --build-arg APP_NAME=${{ inputs.app_name }} -t ${{ inputs.docker_image_name }}
+            docker build --build-arg APP_NAME=${{ inputs.app_name }} -t ${{ inputs.docker_image_name }} .
       - name: Configurar credenciales para AWS
         uses: aws-actions/configure-aws-credentials@v1
         with:
