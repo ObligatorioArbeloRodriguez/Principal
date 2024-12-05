@@ -69,11 +69,13 @@ jobs:
       - name: Download Dockerfile from Principal repository
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: | 
-           git clone https://github.com/ObligatorioArbeloRodriguez/Principal.git
-           cp Principal/Dockerfile .
+        run: |
+                 curl -H "Authorization: Bearer $GITHUB_TOKEN" \
+                      -H "Accept: application/vnd.github.v3.raw" \
+                      -o Dockerfile \
+                      https://raw.githubusercontent.com/ObligatorioArbeloRodriguez/Principal/main/Dockerfile
 
-# probe con el dockerfile pasando a json: https://raw.githubusercontent.com/ObligatorioArbeloRodriguez/Principal/main/Dockerfile DA mismo ERROR
+# probe con el dockerfile pasando a json:  DA mismo ERROR
 # https://api.github.com/repos/ObligatorioArbeloRodriguez/Principal/Dockerfile esto es lo que estaba antes, daba 404 not found ya que estabamos intentando tomar el DOCKERFILE como JSON
 
 # vi en internet que hay otra manera que seria haciendo un clone y tomando solo lo que se necesita, en este caso se haria:
@@ -81,11 +83,10 @@ jobs:
 #   cp Principal/Dockerfile .
 
 # codigo anterior:
-#|
- #         curl -H "Authorization: Bearer $GITHUB_TOKEN" \
-  #             -H "Accept: application/vnd.github.v3.raw" \
-   #            -o Dockerfile \
-    #            
+ # | 
+ # git clone https://github.com/ObligatorioArbeloRodriguez/Principal.git
+ # cp Principal/Dockerfile .
+            
       
       - name: Buildear imagen con nombre recibido
         run: |
