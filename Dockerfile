@@ -8,7 +8,7 @@ ARG APP_NAME=nombre-app-default
 WORKDIR /build/$APP_NAME
 
 
-COPY . .
+COPY . /build/$APP_NAME
 
 RUN mvn clean package -DskipTests
 
