@@ -69,8 +69,9 @@ jobs:
       - name: Download Dockerfile from Principal repository
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: git clone https://github.com/ObligatorioArbeloRodriguez/Principal.git
-             cp Principal/Dockerfile .
+        run: | 
+           git clone https://github.com/ObligatorioArbeloRodriguez/Principal.git
+           cp Principal/Dockerfile .
 
 # probe con el dockerfile pasando a json: https://raw.githubusercontent.com/ObligatorioArbeloRodriguez/Principal/main/Dockerfile DA mismo ERROR
 # https://api.github.com/repos/ObligatorioArbeloRodriguez/Principal/Dockerfile esto es lo que estaba antes, daba 404 not found ya que estabamos intentando tomar el DOCKERFILE como JSON
