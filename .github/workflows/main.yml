@@ -73,7 +73,14 @@ jobs:
           curl -H "Authorization: Bearer $GITHUB_TOKEN" \
                -H "Accept: application/vnd.github.v3.raw" \
                -o Dockerfile \
-               https://api.github.com/repos/ObligatorioArbeloRodriguez/Principal/Dockerfile
+               https://raw.githubusercontent.com/ObligatorioArbeloRodriguez/Principal/main/Dockerfile 
+
+# a testear con el AWS abierto, esto desde el navegador te lleva directo al archivo (LO PASA A JSON)
+# https://api.github.com/repos/ObligatorioArbeloRodriguez/Principal/Dockerfile esto es lo que estaba antes, daba 404 not found ya que estabamos intentando tomar el DOCKERFILE como JSON
+# vi en internet que hay otra manera que seria haciendo un clone y tomando solo lo que se necesita, en este caso se haria:
+# git clone https://github.com/ObligatorioArbeloRodriguez/Principal.git
+#   cp Principal/Dockerfile .
+      
       - name: Buildear imagen con nombre recibido
         run: |
             docker build --build-arg APP_NAME=${{ inputs.app_name }} -t ${{ inputs.docker_image_name }} .
