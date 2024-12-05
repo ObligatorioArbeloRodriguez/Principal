@@ -14,7 +14,7 @@ on:
             description: "Nombre que va a tener la imagen Docker al buildear"
             required: true
             type: string
-        nombre_repo:
+        nombre_repo_ecr:
             description: "nombre del repo que llama al workflow"
             required: true
             type: string
@@ -73,13 +73,13 @@ jobs:
 
       - name: Clonar repo origen
         run: | 
-             git clone https://github.com/ObligatorioArbeloRodriguez/${{inputs.nombre_repo}}.git
+             git clone https://github.com/ObligatorioArbeloRodriguez/${{inputs.app_name}}.git
 
       - name: Download Dockerfile from Principal repository
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-                cd ${{inputs.nombre_repo}}
+                cd ${{inputs.app_name}}
                  curl -H "Authorization: Bearer $GITHUB_TOKEN" \
                       -H "Accept: application/vnd.github.v3.raw" \
                       -o Dockerfile \
@@ -87,8 +87,8 @@ jobs:
 
       - name: Buildear imagen con nombre recibido
         run: |
-            cd ${{inputs.nombre_repo}}
-            docker build -t ${{ inputs.docker_image_name }} .
+            cd ${{inputs.app_name}}
+            docker build -t ${{ inputs.app_name }} .
       - name: Configurar credenciales para AWS
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -100,12 +100,12 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
       - name: Ponerle tag a imagen de Docker antes de subirla al repo de ECR
         run: |
-              REPO_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.app_name }}"
-              docker tag ${{ inputs.docker_image_name }}:latest $REPO_URI:latest
+              REPO_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.nombre_repo_ecr }}"
+              docker tag ${{ inputs.app_name }}:latest $REPO_URI:latest
               echo "La imagen quedó con el siguiente tag: $REPO_URI:latest"
       - name: Pushear imagen docker a ECR
         run: |
-              REPO_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.app_name }}"
+              REPO_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.nombre_repo_ecr }}"
               docker push $REPO_URI:latest
 
   deploy_to_dev:
@@ -115,8 +115,8 @@ jobs:
     steps:
       - name: Actualizar servicio ECS en el cluster DEV
         run: |
-          CLUSTER_NAME=${{ inputs.ecs_cluster_name_dev }}
-          SERVICE_NAME=${{ inputs.ecs_service_name_dev }}
+          CLUSTER_NAME=${{ secrets.NOMBRE_CLUSTER_DEV }}
+          SERVICE_NAME=${{ inputs.app_name }}-service-dev
           IMAGE_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.app_name }}:latest"
           aws ecs update-service \
             --cluster $CLUSTER_NAME \
@@ -131,8 +131,8 @@ jobs:
     steps:
       - name: Actualizar servicio ECS en el cluster TEST
         run: |
-          CLUSTER_NAME=${{ inputs.ecs_cluster_name_test }}
-          SERVICE_NAME=${{ inputs.ecs_service_name_test }}
+          CLUSTER_NAME=${{ secrets.NOMBRE_CLUSTER_TEST }}
+          SERVICE_NAME=${{ inputs.app_name }}-service-test
           IMAGE_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.app_name }}:latest"
           aws ecs update-service \
             --cluster $CLUSTER_NAME \
@@ -149,8 +149,8 @@ jobs:
     steps:
       - name: Update ECS service in Prod cluster
         run: |
-          CLUSTER_NAME=${{ inputs.ecs_cluster_name_prod }}
-          SERVICE_NAME=${{ inputs.ecs_service_name_prod }}
+          CLUSTER_NAME=${{ secrets.NOMBRE_CLUSTER_PROD }}
+          SERVICE_NAME=${{ inputs.app_name }}
           IMAGE_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.app_name }}:latest"
           aws ecs update-service \
             --cluster $CLUSTER_NAME \
