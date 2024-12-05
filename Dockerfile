@@ -5,8 +5,7 @@ ARG APP_NAME=myapp
 
 WORKDIR /app/$APP_NAME
 
-# aca estaba . en vez de app name, el error puede que se solucione aca ya que no accedia al POM
-COPY $APP_NAME .
+COPY . .
 
 RUN mvn clean package -DskipTests
 
