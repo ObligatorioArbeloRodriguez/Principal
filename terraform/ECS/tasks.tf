@@ -27,15 +27,16 @@ resource "aws_ecs_task_definition" "orders" {
         awslogs-region        = "us-east-1"           
         awslogs-stream-prefix = "orders"       
       }
+       environment = [
+      {
+        name  = "APP_ARGS"
+        value = "http://${var.alb_dns_name}/payments http://${var.alb_dns_name}/shipping http://${var.alb_dns_name}/products"
+      }
+    ]
     }
     }
   ])
-  environment = [
-      {
-        name  = "APP_ARGS"
-        value = value = "http://${aws_lb.main.dns_name}/payments http://${aws_lb.main.dns_name}/shipping http://${aws_lb.main.dns_name}/products"
-      }
-    ]
+ 
   runtime_platform {
     cpu_architecture      = "ARM64"
     operating_system_family = "LINUX"

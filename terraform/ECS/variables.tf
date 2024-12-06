@@ -25,4 +25,7 @@ variable "tg_shipping" {
 variable "tg_payments" {
     type = string
 }
+variable "alb_dns_name" {
+    type = string
+}
 

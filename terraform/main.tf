@@ -13,6 +13,7 @@ module "ECS" {
     tg_shipping = module.networking.shipping_target_group_arn
     tg_products = module.networking.products_target_group_arn
     tg_orders = module.networking.orders_target_group_arn
+    alb_dns_name = aws_lb.main.dns_name
 }
 
 module "networking" {
