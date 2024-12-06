@@ -23,7 +23,7 @@ on:
           required: true
         TOKEN:
           required: true
-        ACCOUNT-ID:
+        ACCOUNT_ID:
           required: true
   
         
