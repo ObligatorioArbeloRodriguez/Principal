@@ -10,10 +10,6 @@ on:
           description: 'Clave del proyecto en SonarCloud'
           required: true
           type: string
-        docker_image_name: 
-            description: "Nombre que va a tener la imagen Docker al buildear"
-            required: true
-            type: string
         nombre_repo_ecr:
             description: "nombre del repo que llama al workflow"
             required: true
