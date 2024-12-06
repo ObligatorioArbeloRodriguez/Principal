@@ -142,8 +142,7 @@ jobs:
           aws ecs update-service \
             --cluster $CLUSTER_NAME \
             --service $SERVICE_NAME \
-            --force-new-deployment \
-            --task-definition $SERVICE_NAME
+            --force-new-deployment 
 
   deploy_to_test:
     needs: deploy_to_dev
@@ -158,8 +157,7 @@ jobs:
           aws ecs update-service \
             --cluster $CLUSTER_NAME \
             --service $SERVICE_NAME \
-            --force-new-deployment \
-            --image $IMAGE_URI
+            --force-new-deployment 
 
   deploy_to_prod:
     needs: deploy_to_test
@@ -176,5 +174,4 @@ jobs:
           aws ecs update-service \
             --cluster $CLUSTER_NAME \
             --service $SERVICE_NAME \
-            --force-new-deployment \
-            --image $IMAGE_URI  
+            --force-new-deployment 
