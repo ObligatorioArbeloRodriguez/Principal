@@ -17,6 +17,13 @@ on:
       secrets:
         SONAR_TOKEN:
           required: true
+        aws-access-key-id:
+          required: true
+        aws-secret-access-key:
+          required: true
+        aws-session-token:
+          required: true
+  
         
             
 jobs:
