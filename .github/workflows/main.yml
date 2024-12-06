@@ -134,7 +134,7 @@ jobs:
     name: Hacer deploy a cluster de ambiente DEV
     runs-on: ubuntu-24.04
     steps:
-      - name: Configurar credenciales para AWS (pa probar)
+      - name: Configurar credenciales para AWS
         uses: aws-actions/configure-aws-credentials@v1
         with:
             aws-access-key-id: ${{ secrets.KEY-ID }}
@@ -158,6 +158,14 @@ jobs:
     name: Hacer deploy a cluster de ambiente TEST
     runs-on: ubuntu-24.04
     steps:
+      - name: Configurar credenciales para AWS
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+            aws-access-key-id: ${{ secrets.KEY-ID }}
+            aws-secret-access-key: ${{ secrets.ACCESS-KEY }}
+            aws-session-token: ${{ secrets.TOKEN }}
+            aws-region: us-east-1
+
       - name: Actualizar servicio ECS en el cluster TEST
         run: |
           CLUSTER_NAME=${{ secrets.CLUSTER_TEST }}
@@ -176,7 +184,15 @@ jobs:
     environment: 
       name: production
     steps:
-      - name: Update ECS service in Prod cluster
+      - name: Configurar credenciales para AWS
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+            aws-access-key-id: ${{ secrets.KEY-ID }}
+            aws-secret-access-key: ${{ secrets.ACCESS-KEY }}
+            aws-session-token: ${{ secrets.TOKEN }}
+            aws-region: us-east-1
+            
+      - name: Actualizar servicio ECS en el cluster PROD
         run: |
           CLUSTER_NAME=${{ secrets.CLUSTER_PROD }}
           SERVICE_NAME=${{ inputs.app_name }}-service-prod
