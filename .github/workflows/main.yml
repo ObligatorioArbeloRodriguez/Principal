@@ -25,6 +25,12 @@ on:
           required: true
         ACCOUNT_ID:
           required: true
+        CLUSTER_DEV:
+          required: true
+        CLUSTER_TEST:
+          required: true
+        CLUSTER_PROD:
+          required: true
   
         
             
@@ -130,7 +136,7 @@ jobs:
     steps:
       - name: Actualizar servicio ECS en el cluster DEV
         run: |
-          CLUSTER_NAME=${{ secrets.NOMBRE_CLUSTER_DEV }}
+          CLUSTER_NAME=${{ secrets.CLUSTER_DEV }}
           SERVICE_NAME=${{ inputs.app_name }}-service-dev
           IMAGE_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.app_name }}:latest"
           aws ecs update-service \
@@ -146,7 +152,7 @@ jobs:
     steps:
       - name: Actualizar servicio ECS en el cluster TEST
         run: |
-          CLUSTER_NAME=${{ secrets.NOMBRE_CLUSTER_TEST }}
+          CLUSTER_NAME=${{ secrets.CLUSTER_TEST }}
           SERVICE_NAME=${{ inputs.app_name }}-service-test
           IMAGE_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.app_name }}:latest"
           aws ecs update-service \
@@ -164,7 +170,7 @@ jobs:
     steps:
       - name: Update ECS service in Prod cluster
         run: |
-          CLUSTER_NAME=${{ secrets.NOMBRE_CLUSTER_PROD }}
+          CLUSTER_NAME=${{ secrets.CLUSTER_PROD }}
           SERVICE_NAME=${{ inputs.app_name }}
           IMAGE_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.app_name }}:latest"
           aws ecs update-service \
