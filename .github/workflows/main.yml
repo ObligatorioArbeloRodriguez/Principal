@@ -22,7 +22,7 @@ on:
 jobs:
   sonarcloud:
     name: Análisis SonarCloud
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
         with:
@@ -76,10 +76,18 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
                 cd ${{inputs.app_name}}
-                 curl -H "Authorization: Bearer $GITHUB_TOKEN" \
-                      -H "Accept: application/vnd.github.v3.raw" \
-                      -o Dockerfile \
-                      https://raw.githubusercontent.com/ObligatorioArbeloRodriguez/Principal/main/Dockerfile
+                if [[ "${{ inputs.app_name }}" == "be-orders" ]]; then
+                curl -H "Authorization: Bearer $GITHUB_TOKEN" \
+                -H "Accept: application/vnd.github.v3.raw" \
+                -o Dockerfile \
+                https://raw.githubusercontent.com/ObligatorioArbeloRodriguez/Principal/main/orders/Dockerfile
+                else
+                curl -H "Authorization: Bearer $GITHUB_TOKEN" \
+                -H "Accept: application/vnd.github.v3.raw" \
+                -o Dockerfile \
+                https://raw.githubusercontent.com/ObligatorioArbeloRodriguez/Principal/main/Dockerfile
+                fi
+                
 
       - name: Buildear imagen con nombre recibido
         run: |
@@ -91,7 +99,7 @@ jobs:
             aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
             aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-            aws-region: ${{ secrets.AWS_REGION }}
+            aws-region: us-east-1
       - name: Autenticarse en ECR
         uses: aws-actions/amazon-ecr-login@v1
       - name: Ponerle tag a imagen de Docker antes de subirla al repo de ECR

@@ -10,7 +10,7 @@ resource "aws_ecs_task_definition" "orders" {
   container_definitions = jsonencode([
     {
       name      = "orders"
-      image     = "myrepo/orders:${var.environment}"
+      image     = "311813033202.dkr.ecr.us-east-1.amazonaws.com/orders-repo:latest"
       essential = true
       portMappings = [
         {
@@ -30,6 +30,12 @@ resource "aws_ecs_task_definition" "orders" {
     }
     }
   ])
+  environment = [
+      {
+        name  = "APP_ARGS"
+        value = value = "http://${aws_lb.main.dns_name}/payments http://${aws_lb.main.dns_name}/shipping http://${aws_lb.main.dns_name}/products"
+      }
+    ]
   runtime_platform {
     cpu_architecture      = "ARM64"
     operating_system_family = "LINUX"
@@ -48,7 +54,7 @@ resource "aws_ecs_task_definition" "products" {
   container_definitions = jsonencode([
     {
       name      = "products"
-      image     = "myrepo/products:${var.environment}"
+      image     = "311813033202.dkr.ecr.us-east-1.amazonaws.com/products-repo:latest"
       essential = true
       portMappings = [
         {
@@ -86,7 +92,7 @@ resource "aws_ecs_task_definition" "shipping" {
   container_definitions = jsonencode([
     {
       name      = "shipping"
-      image     = "myrepo/shipping:${var.environment}"
+      image     = "311813033202.dkr.ecr.us-east-1.amazonaws.com/shipping-repo:latest"
       essential = true
       portMappings = [
         {
@@ -124,7 +130,7 @@ resource "aws_ecs_task_definition" "payments" {
   container_definitions = jsonencode([
     {
       name      = "payments"
-      image     = "myrepo/payments:${var.environment}"
+      image     = "311813033202.dkr.ecr.us-east-1.amazonaws.com/payments-repo:latest"
       essential = true
       portMappings = [
         {
