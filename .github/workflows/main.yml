@@ -142,7 +142,8 @@ jobs:
           aws ecs update-service \
             --cluster $CLUSTER_NAME \
             --service $SERVICE_NAME \
-            --force-new-deployment 
+            --force-new-deployment \
+            --region us-east-1
 
   deploy_to_test:
     needs: deploy_to_dev
@@ -157,7 +158,8 @@ jobs:
           aws ecs update-service \
             --cluster $CLUSTER_NAME \
             --service $SERVICE_NAME \
-            --force-new-deployment 
+            --force-new-deployment \
+            --region us-east-1
 
   deploy_to_prod:
     needs: deploy_to_test
@@ -174,4 +176,5 @@ jobs:
           aws ecs update-service \
             --cluster $CLUSTER_NAME \
             --service $SERVICE_NAME \
-            --force-new-deployment 
+            --force-new-deployment \
+            --region us-east-1
