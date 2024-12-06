@@ -143,7 +143,7 @@ jobs:
             --cluster $CLUSTER_NAME \
             --service $SERVICE_NAME \
             --force-new-deployment \
-            --image $IMAGE_URI
+            --task-definition $SERVICE_NAME
 
   deploy_to_test:
     needs: deploy_to_dev
@@ -171,7 +171,7 @@ jobs:
       - name: Update ECS service in Prod cluster
         run: |
           CLUSTER_NAME=${{ secrets.CLUSTER_PROD }}
-          SERVICE_NAME=${{ inputs.app_name }}
+          SERVICE_NAME=${{ inputs.app_name }}-service-prod
           IMAGE_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.app_name }}:latest"
           aws ecs update-service \
             --cluster $CLUSTER_NAME \
