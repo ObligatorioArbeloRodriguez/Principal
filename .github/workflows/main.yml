@@ -138,7 +138,7 @@ jobs:
         run: |
           CLUSTER_NAME=${{ secrets.CLUSTER_DEV }}
           SERVICE_NAME=${{ inputs.app_name }}-service-dev
-          IMAGE_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.app_name }}:latest"
+          IMAGE_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.nombre_repo_ecr }}:latest"
           aws ecs update-service \
             --cluster $CLUSTER_NAME \
             --service $SERVICE_NAME \
@@ -154,7 +154,7 @@ jobs:
         run: |
           CLUSTER_NAME=${{ secrets.CLUSTER_TEST }}
           SERVICE_NAME=${{ inputs.app_name }}-service-test
-          IMAGE_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.app_name }}:latest"
+          IMAGE_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.nombre_repo_ecr }}:latest"
           aws ecs update-service \
             --cluster $CLUSTER_NAME \
             --service $SERVICE_NAME \
@@ -172,7 +172,7 @@ jobs:
         run: |
           CLUSTER_NAME=${{ secrets.CLUSTER_PROD }}
           SERVICE_NAME=${{ inputs.app_name }}-service-prod
-          IMAGE_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.app_name }}:latest"
+          IMAGE_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.nombre_repo_ecr }}:latest"
           aws ecs update-service \
             --cluster $CLUSTER_NAME \
             --service $SERVICE_NAME \
