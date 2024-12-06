@@ -1,5 +1,5 @@
 resource "aws_ecs_service" "be-orders" {
-  name            = "be-orders-service-${var.environment}"
+  name            = "be-orders-service-${terraform.workspace}"
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.orders.arn
   desired_count   = 5
@@ -11,8 +11,8 @@ resource "aws_ecs_service" "be-orders" {
   force_new_deployment = true
 
   network_configuration {
-    subnets         = var.subnets
-    security_groups = var.security_groups
+    subnets         = var.subnets.default
+    security_groups = var.security_groups.default
     assign_public_ip = false
   }
 
@@ -22,13 +22,13 @@ resource "aws_ecs_service" "be-orders" {
     container_port   = 8080
   }
 
-   depends_on = [
+  depends_on = [
     aws_ecs_task_definition.orders 
   ]
 }
 
 resource "aws_ecs_service" "be-payments" {
-  name            = "be-payments-service-${var.environment}"
+  name            = "be-payments-service-${terraform.workspace}"
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.payments.arn
   desired_count   = 5
@@ -40,8 +40,8 @@ resource "aws_ecs_service" "be-payments" {
   force_new_deployment = true
 
   network_configuration {
-    subnets         = var.subnets
-    security_groups = var.security_groups
+    subnets         = var.subnets.default
+    security_groups = var.security_groups.default
     assign_public_ip = false
   }
 
@@ -51,13 +51,13 @@ resource "aws_ecs_service" "be-payments" {
     container_port   = 8080
   }
 
-   depends_on = [
+  depends_on = [
     aws_ecs_task_definition.payments
   ]
 }
 
 resource "aws_ecs_service" "be-shipping" {
-  name            = "be-shipping-service-${var.environment}"
+  name            = "be-shipping-service-${terraform.workspace}"
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.shipping.arn
   desired_count   = 5
@@ -69,8 +69,8 @@ resource "aws_ecs_service" "be-shipping" {
   force_new_deployment = true
 
   network_configuration {
-    subnets         = var.subnets
-    security_groups = var.security_groups
+    subnets         = var.subnets.default
+    security_groups = var.security_groups.default
     assign_public_ip = false
   }
 
@@ -86,7 +86,7 @@ resource "aws_ecs_service" "be-shipping" {
 }
 
 resource "aws_ecs_service" "be-products" {
-  name            = "be-products-service-${var.environment}"
+  name            = "be-products-service-${terraform.workspace}"
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.products.arn
   desired_count   = 5
@@ -98,8 +98,8 @@ resource "aws_ecs_service" "be-products" {
   force_new_deployment = true
 
   network_configuration {
-    subnets         = var.subnets
-    security_groups = var.security_groups
+    subnets         = var.subnets.default
+    security_groups = var.security_groups.default
     assign_public_ip = false
   }
 
@@ -113,6 +113,3 @@ resource "aws_ecs_service" "be-products" {
     aws_ecs_task_definition.products
   ]
 }
-
-
-

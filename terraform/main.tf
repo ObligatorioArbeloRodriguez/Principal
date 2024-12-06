@@ -1,12 +1,10 @@
 module "API_gateway" {
     source = "./api_gateway"
-    environment = var.environment
     alb_dns_name = aws_lb.main.dns_name
 }
 
 module "ECS" {
     source = "./ECS"
-    environment = var.environment
     subnets = module.networking.public_subnet_ids
     security_groups = [module.networking.ecs_security_group_id]
     tg_payments = module.networking.payments_target_group_arn
@@ -19,13 +17,11 @@ module "ECS" {
 
 module "networking" {
     source = "./networking"
-    environment = var.environment 
 }
 
 
 module "S3" {
     source = "./S3"
-    environment = var.environment
 }
 
 
