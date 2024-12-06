@@ -136,8 +136,8 @@ jobs:
     steps:
       - name: Tirar echos necesito saber que pasa 
         run: |
-            echo aws configure list
-            echo info antes de actualizar
+            aws configure list
+           
 
       - name: Actualizar servicio ECS en el cluster DEV
         run: |
@@ -150,8 +150,8 @@ jobs:
             --force-new-deployment \
             --region us-east-1
 
-          echo aws configure list
-          echo despues de actualizar, sigue dando errores de credenciales?
+           aws configure list
+           
 
   deploy_to_test:
     needs: deploy_to_dev
