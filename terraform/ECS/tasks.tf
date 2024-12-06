@@ -4,13 +4,13 @@ resource "aws_ecs_task_definition" "orders" {
   requires_compatibilities = ["FARGATE"]
   cpu                      = "256"
   memory                   = "512"
-  execution_role_arn       = "arn:aws:iam::311813033202:role/LabRole"
-  task_role_arn            = "arn:aws:iam::311813033202:role/LabRole"
+  execution_role_arn       = "arn:aws:iam::${var.accountid}:role/LabRole"
+  task_role_arn            = "arn:aws:iam::${var.accountid}:role/LabRole"
 
   container_definitions = jsonencode([
     {
       name      = "orders"
-      image     = "311813033202.dkr.ecr.us-east-1.amazonaws.com/orders-repo:latest"
+      image     = "${var.accountid}.dkr.ecr.us-east-1.amazonaws.com/orders-repo:latest"
       essential = true
       portMappings = [
         {
@@ -49,13 +49,13 @@ resource "aws_ecs_task_definition" "products" {
   requires_compatibilities = ["FARGATE"]
   cpu                      = "256"
   memory                   = "512"
-  execution_role_arn       = "arn:aws:iam::311813033202:role/LabRole"
-  task_role_arn            = "arn:aws:iam::311813033202:role/LabRole"
+  execution_role_arn       = "arn:aws:iam::${var.accountid}:role/LabRole"
+  task_role_arn            = "arn:aws:iam::${var.accountid}:role/LabRole"
 
   container_definitions = jsonencode([
     {
       name      = "products"
-      image     = "311813033202.dkr.ecr.us-east-1.amazonaws.com/products-repo:latest"
+      image     = "${var.accountid}.dkr.ecr.us-east-1.amazonaws.com/products-repo:latest"
       essential = true
       portMappings = [
         {
@@ -87,13 +87,13 @@ resource "aws_ecs_task_definition" "shipping" {
   requires_compatibilities = ["FARGATE"]
   cpu                      = "256"
   memory                   = "512"
-  execution_role_arn       = "arn:aws:iam::311813033202:role/LabRole"
-  task_role_arn            = "arn:aws:iam::311813033202:role/LabRole"
+  execution_role_arn       = "arn:aws:iam::${var.accountid}:role/LabRole"
+  task_role_arn            = "arn:aws:iam::${var.accountid}:role/LabRole"
 
   container_definitions = jsonencode([
     {
       name      = "shipping"
-      image     = "311813033202.dkr.ecr.us-east-1.amazonaws.com/shipping-repo:latest"
+      image     = "${var.accountid}.dkr.ecr.us-east-1.amazonaws.com/shipping-repo:latest"
       essential = true
       portMappings = [
         {
@@ -125,13 +125,13 @@ resource "aws_ecs_task_definition" "payments" {
   requires_compatibilities = ["FARGATE"]
   cpu                      = "256"
   memory                   = "512"
-  execution_role_arn       = "arn:aws:iam::311813033202:role/LabRole"
-  task_role_arn            = "arn:aws:iam::311813033202:role/LabRole"
+  execution_role_arn       = "arn:aws:iam::${var.accountid}:role/LabRole"
+  task_role_arn            = "arn:aws:iam::${var.accountid}:role/LabRole"
 
   container_definitions = jsonencode([
     {
       name      = "payments"
-      image     = "311813033202.dkr.ecr.us-east-1.amazonaws.com/payments-repo:latest"
+      image     = "${var.accountid}.dkr.ecr.us-east-1.amazonaws.com/payments-repo:latest"
       essential = true
       portMappings = [
         {

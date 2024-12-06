@@ -93,8 +93,15 @@ jobs:
         run: |
             cd ${{inputs.app_name}}
             docker build -t ${{ inputs.app_name }} .
+            
       - name: Configurar credenciales para AWS
+          run | 
+              echo ${{ secrets.AWS_ACCESS_KEY_ID }}
+              echo ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+              echo ${{ secrets.AWS_SESSION_TOKEN }}
+
         uses: aws-actions/configure-aws-credentials@v1
+       
         with:
             aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
             aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
