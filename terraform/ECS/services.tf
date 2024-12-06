@@ -1,4 +1,4 @@
-resource "aws_ecs_service" "orders" {
+resource "aws_ecs_service" "be-orders" {
   name            = "be-orders-service-${var.environment}"
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.orders.arn
@@ -27,7 +27,7 @@ resource "aws_ecs_service" "orders" {
   ]
 }
 
-resource "aws_ecs_service" "payments" {
+resource "aws_ecs_service" "be-payments" {
   name            = "be-payments-service-${var.environment}"
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.payments.arn
@@ -56,7 +56,7 @@ resource "aws_ecs_service" "payments" {
   ]
 }
 
-resource "aws_ecs_service" "shipping" {
+resource "aws_ecs_service" "be-shipping" {
   name            = "be-shipping-service-${var.environment}"
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.shipping.arn
@@ -85,7 +85,7 @@ resource "aws_ecs_service" "shipping" {
   ]
 }
 
-resource "aws_ecs_service" "products" {
+resource "aws_ecs_service" "be-products" {
   name            = "be-products-service-${var.environment}"
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.products.arn
