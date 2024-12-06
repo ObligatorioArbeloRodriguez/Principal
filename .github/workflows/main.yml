@@ -134,10 +134,13 @@ jobs:
     name: Hacer deploy a cluster de ambiente DEV
     runs-on: ubuntu-24.04
     steps:
-      - name: Tirar echos necesito saber que pasa 
-        run: |
-            aws configure list
-           
+      - name: Configurar credenciales para AWS (pa probar)
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+            aws-access-key-id: ${{ secrets.KEY-ID }}
+            aws-secret-access-key: ${{ secrets.ACCESS-KEY }}
+            aws-session-token: ${{ secrets.TOKEN }}
+            aws-region: us-east-1
 
       - name: Actualizar servicio ECS en el cluster DEV
         run: |
@@ -149,9 +152,6 @@ jobs:
             --service $SERVICE_NAME \
             --force-new-deployment \
             --region us-east-1
-
-           aws configure list
-           
 
   deploy_to_test:
     needs: deploy_to_dev
