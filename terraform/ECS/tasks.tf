@@ -1,5 +1,5 @@
 resource "aws_ecs_task_definition" "orders" {
-  family                   = "orders-${var.environment}"
+  family                   = "orders-${terraform.workspace}"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = "256"
@@ -10,7 +10,7 @@ resource "aws_ecs_task_definition" "orders" {
   container_definitions = jsonencode([
     {
       name      = "orders"
-      image     = "${var.accountid}.dkr.ecr.us-east-1.amazonaws.com/orders-repo:latest"
+      image     = "${var.accountid}.dkr.ecr.us-east-1.amazonaws.com/orders-repo:${terraform.workspace}"
       essential = true
       portMappings = [
         {
@@ -20,23 +20,23 @@ resource "aws_ecs_task_definition" "orders" {
         }
       ]
       logConfiguration = {
-      logDriver = "awslogs"
-      options = {
-        awslogs-create-group  = "true"              
-        awslogs-group         = "/ecs/orders-logs" 
-        awslogs-region        = "us-east-1"           
-        awslogs-stream-prefix = "orders"       
+        logDriver = "awslogs"
+        options = {
+          awslogs-create-group  = "true"
+          awslogs-group         = "/ecs/orders-logs"
+          awslogs-region        = "us-east-1"
+          awslogs-stream-prefix = "orders"
+        }
       }
-       environment = [
-      {
-        name  = "APP_ARGS"
-        value = "http://${var.alb_dns_name}/payments http://${var.alb_dns_name}/shipping http://${var.alb_dns_name}/products"
-      }
-    ]
-    }
+      environment = [
+        {
+          name  = "APP_ARGS"
+          value = "http://${var.alb_dns_name}/payments http://${var.alb_dns_name}/shipping http://${var.alb_dns_name}/products"
+        }
+      ]
     }
   ])
- 
+
   runtime_platform {
     cpu_architecture      = "ARM64"
     operating_system_family = "LINUX"
@@ -44,7 +44,7 @@ resource "aws_ecs_task_definition" "orders" {
 }
 
 resource "aws_ecs_task_definition" "products" {
-  family                   = "products-${var.environment}"
+  family                   = "products-${terraform.workspace}"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = "256"
@@ -55,7 +55,7 @@ resource "aws_ecs_task_definition" "products" {
   container_definitions = jsonencode([
     {
       name      = "products"
-      image     = "${var.accountid}.dkr.ecr.us-east-1.amazonaws.com/products-repo:latest"
+      image     = "${var.accountid}.dkr.ecr.us-east-1.amazonaws.com/products-repo:${terraform.workspace}"
       essential = true
       portMappings = [
         {
@@ -65,16 +65,17 @@ resource "aws_ecs_task_definition" "products" {
         }
       ]
       logConfiguration = {
-      logDriver = "awslogs"
-      options = {
-        awslogs-create-group  = "true"              
-        awslogs-group         = "/ecs/products-logs" 
-        awslogs-region        = "us-east-1"           
-        awslogs-stream-prefix = "products"       
+        logDriver = "awslogs"
+        options = {
+          awslogs-create-group  = "true"
+          awslogs-group         = "/ecs/products-logs"
+          awslogs-region        = "us-east-1"
+          awslogs-stream-prefix = "products"
+        }
       }
     }
-    }
   ])
+
   runtime_platform {
     cpu_architecture      = "ARM64"
     operating_system_family = "LINUX"
@@ -82,7 +83,7 @@ resource "aws_ecs_task_definition" "products" {
 }
 
 resource "aws_ecs_task_definition" "shipping" {
-  family                   = "shipping-${var.environment}"
+  family                   = "shipping-${terraform.workspace}"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = "256"
@@ -93,7 +94,7 @@ resource "aws_ecs_task_definition" "shipping" {
   container_definitions = jsonencode([
     {
       name      = "shipping"
-      image     = "${var.accountid}.dkr.ecr.us-east-1.amazonaws.com/shipping-repo:latest"
+      image     = "${var.accountid}.dkr.ecr.us-east-1.amazonaws.com/shipping-repo:${terraform.workspace}"
       essential = true
       portMappings = [
         {
@@ -103,16 +104,17 @@ resource "aws_ecs_task_definition" "shipping" {
         }
       ]
       logConfiguration = {
-      logDriver = "awslogs"
-      options = {
-        awslogs-create-group  = "true"              
-        awslogs-group         = "/ecs/shipping-logs" 
-        awslogs-region        = "us-east-1"           
-        awslogs-stream-prefix = "shipping"       
+        logDriver = "awslogs"
+        options = {
+          awslogs-create-group  = "true"
+          awslogs-group         = "/ecs/shipping-logs"
+          awslogs-region        = "us-east-1"
+          awslogs-stream-prefix = "shipping"
+        }
       }
     }
-    }
   ])
+
   runtime_platform {
     cpu_architecture      = "ARM64"
     operating_system_family = "LINUX"
@@ -120,7 +122,7 @@ resource "aws_ecs_task_definition" "shipping" {
 }
 
 resource "aws_ecs_task_definition" "payments" {
-  family                   = "payments-${var.environment}"
+  family                   = "payments-${terraform.workspace}"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = "256"
@@ -131,7 +133,7 @@ resource "aws_ecs_task_definition" "payments" {
   container_definitions = jsonencode([
     {
       name      = "payments"
-      image     = "${var.accountid}.dkr.ecr.us-east-1.amazonaws.com/payments-repo:latest"
+      image     = "${var.accountid}.dkr.ecr.us-east-1.amazonaws.com/payments-repo:${terraform.workspace}"
       essential = true
       portMappings = [
         {
@@ -141,19 +143,19 @@ resource "aws_ecs_task_definition" "payments" {
         }
       ]
       logConfiguration = {
-      logDriver = "awslogs"
-      options = {
-        awslogs-create-group  = "true"              
-        awslogs-group         = "/ecs/payments-logs" 
-        awslogs-region        = "us-east-1"           
-        awslogs-stream-prefix = "payments"       
+        logDriver = "awslogs"
+        options = {
+          awslogs-create-group  = "true"
+          awslogs-group         = "/ecs/payments-logs"
+          awslogs-region        = "us-east-1"
+          awslogs-stream-prefix = "payments"
+        }
       }
     }
-    }
   ])
+
   runtime_platform {
     cpu_architecture      = "ARM64"
     operating_system_family = "LINUX"
   }
 }
-
