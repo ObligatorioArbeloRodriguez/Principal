@@ -134,6 +134,11 @@ jobs:
     name: Hacer deploy a cluster de ambiente DEV
     runs-on: ubuntu-24.04
     steps:
+      - name: Tirar echos necesito saber que pasa 
+        run: |
+            echo aws configure list
+            echo info antes de actualizar
+
       - name: Actualizar servicio ECS en el cluster DEV
         run: |
           CLUSTER_NAME=${{ secrets.CLUSTER_DEV }}
@@ -144,6 +149,9 @@ jobs:
             --service $SERVICE_NAME \
             --force-new-deployment \
             --region us-east-1
+
+          echo aws configure list
+          echo despues de actualizar, sigue dando errores de credenciales?
 
   deploy_to_test:
     needs: deploy_to_dev
