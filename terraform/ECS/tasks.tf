@@ -10,7 +10,8 @@ resource "aws_ecs_task_definition" "orders" {
   container_definitions = jsonencode([
     {
       name      = "orders"
-      image     = "${var.accountid}.dkr.ecr.us-east-1.amazonaws.com/orders-repo:${terraform.workspace}"
+      image     = "${var.accountid}.dkr.ecr.us-east-1.amazonaws.com/orders-repo:latest"
+
       essential = true
       portMappings = [
         {
@@ -28,14 +29,16 @@ resource "aws_ecs_task_definition" "orders" {
           awslogs-stream-prefix = "orders"
         }
       }
-      environment = [
-        {
-          name  = "APP_ARGS"
-          value = "http://${var.alb_dns_name}/payments http://${var.alb_dns_name}/shipping http://${var.alb_dns_name}/products"
-        }
-      ]
+       environment = [
+      {
+        name  = "APP_ARGS"
+        value = "http://${var.alb_dns_name}/payments http://${var.alb_dns_name}/shipping http://${var.alb_dns_name}/products"
+      }
+    ]
+    }
     }
   ])
+ 
 
   runtime_platform {
     cpu_architecture      = "ARM64"
@@ -55,7 +58,9 @@ resource "aws_ecs_task_definition" "products" {
   container_definitions = jsonencode([
     {
       name      = "products"
-      image     = "${var.accountid}.dkr.ecr.us-east-1.amazonaws.com/products-repo:${terraform.workspace}"
+
+      image     = "${var.accountid}.dkr.ecr.us-east-1.amazonaws.com/products-repo:latest"
+
       essential = true
       portMappings = [
         {
@@ -94,7 +99,8 @@ resource "aws_ecs_task_definition" "shipping" {
   container_definitions = jsonencode([
     {
       name      = "shipping"
-      image     = "${var.accountid}.dkr.ecr.us-east-1.amazonaws.com/shipping-repo:${terraform.workspace}"
+      image     = "${var.accountid}.dkr.ecr.us-east-1.amazonaws.com/shipping-repo:latest"
+
       essential = true
       portMappings = [
         {
@@ -133,7 +139,8 @@ resource "aws_ecs_task_definition" "payments" {
   container_definitions = jsonencode([
     {
       name      = "payments"
-      image     = "${var.accountid}.dkr.ecr.us-east-1.amazonaws.com/payments-repo:${terraform.workspace}"
+      image     = "${var.accountid}.dkr.ecr.us-east-1.amazonaws.com/payments-repo:latest"
+
       essential = true
       portMappings = [
         {

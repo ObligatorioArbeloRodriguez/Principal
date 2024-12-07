@@ -39,6 +39,10 @@ variable "alb_dns_name" {
 }
 
 variable "accountid" {
-  type        = string
-  description = "ingresá el id de tu cuenta"
+  type = string
 }
+
+variable "crear_repo" {
+  default = false
+}
+

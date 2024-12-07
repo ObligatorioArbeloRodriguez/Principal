@@ -1,5 +1,6 @@
+
 variable "accountid" {
   type        = string
-  description = "ingresá el id de tu cuenta"
+  description = "ingresa el id de tu cuenta"
 }
 
