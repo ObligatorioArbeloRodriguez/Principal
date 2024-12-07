@@ -1,6 +1,7 @@
 name: Pipeline principal reutilizable para aplicativos backend
 on:
     workflow_call:
+     
       inputs:
         app_name:
           description: 'Nombre de la aplicación que "llamó" al pipeline'
@@ -31,6 +32,8 @@ on:
           required: true
         CLUSTER_PROD:
           required: true
+env: 
+    Login_AWS: 
      
 jobs:
   loguear-aws:
@@ -86,9 +89,10 @@ jobs:
           fi
           echo "El quality gate fue pasado con éxito"
   docker_build_and_push:
-    needs: [sonarcloud, loguear-aws]
+    needs: sonarcloud
     name: Build de container docker
     runs-on: ubuntu-24.04
+    
     steps:
 
       - name: Clonar repo origen
@@ -98,7 +102,7 @@ jobs:
       - name: Download Dockerfile from Principal repository
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          AWS_REGION: us-east-1
+          uses: /workflows/auth.yml
         run: |
                 cd ${{inputs.app_name}}
                 if [[ "${{ inputs.app_name }}" == "be-orders" ]]; then
@@ -132,7 +136,7 @@ jobs:
               docker push $REPO_URI:latest
 
   deploy_to_dev:
-    needs: [docker_build_and_push, loguear-aws]
+    needs: docker_build_and_push
     name: Hacer deploy a cluster de ambiente DEV
     runs-on: ubuntu-24.04
     steps:
@@ -148,7 +152,7 @@ jobs:
             --region us-east-1
 
   deploy_to_test:
-    needs: [deploy_to_dev, loguear-aws]
+    needs: deploy_to_dev
     name: Hacer deploy a cluster de ambiente TEST
     runs-on: ubuntu-24.04
     steps:
@@ -164,7 +168,7 @@ jobs:
             --region us-east-1
 
   deploy_to_prod:
-    needs: [deploy_to_test, loguear-aws]
+    needs: deploy_to_test
     name: Deploy a cluster de ambiente PROD
     runs-on: ubuntu-24.04
     environment: 
