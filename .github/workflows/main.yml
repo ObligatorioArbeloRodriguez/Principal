@@ -36,7 +36,7 @@ on:
      
 jobs:
   loguear-aws:
-    name: Configurar credenciales para AWS
+    name: Configurar credenciales AWS
     runs-on: ubuntu-24.04
     steps:
     -  uses: aws-actions/configure-aws-credentials@v1
@@ -78,7 +78,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=${{inputs.sonar_project_key}}
 
-      - name: Análisis de SonarCloud Quality Gate
+      - name: SonarCloud Quality Gate
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
@@ -91,7 +91,7 @@ jobs:
           echo "El quality gate fue pasado con éxito"
   docker_build_and_push:
     needs: sonarcloud
-    name: Build de container docker
+    name: Build de Docker
     runs-on: ubuntu-24.04
     steps:
       - name: Configurar credenciales para AWS
@@ -102,11 +102,11 @@ jobs:
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: us-east-1
             
-      - name: Clonar repo origen
+      - name: Clonar repo principal
         run: | 
              git clone https://github.com/ObligatorioArbeloRodriguez/${{inputs.app_name}}.git
 
-      - name: Download Dockerfile from Principal repository
+      - name: Descargar el Dockerfile
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -146,7 +146,7 @@ jobs:
     name: Hacer deploy a cluster de ambiente DEV
     runs-on: ubuntu-24.04
     steps:
-      - name: Configurar credenciales para AWS
+      - name: Credenciales AWS
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -194,7 +194,7 @@ jobs:
     environment: 
       name: production
     steps:           
-      - name: Configurar credenciales para AWS
+      - name: Credenciales AWS
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
