@@ -1,5 +1,5 @@
 resource "aws_ecs_cluster" "main" {
-  name = "obligatorio-cluster-${terraform.workspace}"
+  name = "obligatorio-cluster-${var.environment}"
 
   setting {
     name  = "containerInsights"
