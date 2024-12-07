@@ -17,11 +17,11 @@ on:
       secrets:
         SONAR_TOKEN:
           required: true
-        KEY-ID:
+        AWS_ACCESS_KEY_ID:
           required: true
-        ACCESS-KEY:
+        AWS_SECRET_ACCESS_KEY:
           required: true
-        TOKEN:
+        AWS_SESSION_TOKEN:
           required: true
         ACCOUNT_ID:
           required: true
