@@ -1,9 +1,9 @@
 resource "aws_s3_bucket" "frontend" {
-  bucket = "my-frontend-${terraform.workspace}"
+  bucket = "my-frontend-${var.environment}"
 
   tags = {
     Name        = "React Frontend Bucket"
-    Environment = terraform.workspace
+    Environment = var.environment
   }
 }
 
