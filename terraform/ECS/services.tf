@@ -12,8 +12,8 @@ resource "aws_ecs_service" "be-orders" {
   force_new_deployment = true
 
   network_configuration {
-    subnets         = var.subnets.default
-    security_groups = var.security_groups.default
+    subnets         = var.subnets
+    security_groups = var.security_groups
     assign_public_ip = false
   }
 
@@ -43,8 +43,8 @@ resource "aws_ecs_service" "be-payments" {
   force_new_deployment = true
 
   network_configuration {
-    subnets         = var.subnets.default
-    security_groups = var.security_groups.default
+    subnets         = var.subnets
+    security_groups = var.security_groups
     assign_public_ip = false
   }
 
@@ -74,8 +74,8 @@ resource "aws_ecs_service" "be-shipping" {
   force_new_deployment = true
 
   network_configuration {
-    subnets         = var.subnets.default
-    security_groups = var.security_groups.default
+    subnets         = var.subnets
+    security_groups = var.security_groups
     assign_public_ip = false
   }
 
@@ -105,8 +105,8 @@ resource "aws_ecs_service" "be-products" {
   force_new_deployment = true
 
   network_configuration {
-    subnets         = var.subnets.default
-    security_groups = var.security_groups.default
+    subnets         = var.subnets
+    security_groups = var.security_groups
     assign_public_ip = false
   }
 
