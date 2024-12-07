@@ -1,5 +1,5 @@
 resource "aws_api_gateway_rest_api" "main" {
-  name = "obligatorio-api-${var.environment}"
+  name = "obligatorio-api-${terraform.workspace}"
 }
 
 resource "aws_api_gateway_resource" "orders" {
@@ -107,7 +107,7 @@ resource "aws_api_gateway_deployment" "main" {
 }
 
 resource "aws_api_gateway_stage" "main" {
-  stage_name   = var.environment
+  stage_name   = terraform.workspace
   rest_api_id  = aws_api_gateway_rest_api.main.id
   deployment_id = aws_api_gateway_deployment.main.id
 }
