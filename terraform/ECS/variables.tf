@@ -25,4 +25,15 @@ variable "tg_shipping" {
 variable "tg_payments" {
     type = string
 }
+variable "alb_dns_name" {
+    type = string
+}
+
+variable "accountid" {
+  type = string
+}
+
+variable "crear_repo" {
+  default = false
+}
 

@@ -1,5 +1,5 @@
 resource "aws_lb" "main" {
-  name               = "Obligatorio-lb"
+  name               = "Obligatorio-lb-${var.environment}"
   internal           = false
   load_balancer_type = "application"
   security_groups = [module.networking.lb_security_group_id]

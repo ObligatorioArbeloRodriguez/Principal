@@ -10,19 +10,34 @@ on:
           description: 'Clave del proyecto en SonarCloud'
           required: true
           type: string
-        docker_image_name: 
-            description: "Nombre que va a tener la imagen Docker al buildear"
+        nombre_repo_ecr:
+            description: "nombre del repo que llama al workflow"
             required: true
             type: string
       secrets:
         SONAR_TOKEN:
           required: true
+        KEY-ID:
+          required: true
+        ACCESS-KEY:
+          required: true
+        TOKEN:
+          required: true
+        ACCOUNT_ID:
+          required: true
+        CLUSTER_DEV:
+          required: true
+        CLUSTER_TEST:
+          required: true
+        CLUSTER_PROD:
+          required: true
+  
         
             
 jobs:
   sonarcloud:
     name: Análisis SonarCloud
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
         with:
@@ -66,48 +81,52 @@ jobs:
     name: Build de container docker
     runs-on: ubuntu-24.04
     steps:
+
+      - name: Clonar repo origen
+        run: | 
+             git clone https://github.com/ObligatorioArbeloRodriguez/${{inputs.app_name}}.git
+
       - name: Download Dockerfile from Principal repository
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-                 curl -H "Authorization: Bearer $GITHUB_TOKEN" \
-                      -H "Accept: application/vnd.github.v3.raw" \
-                      -o Dockerfile \
-                      https://raw.githubusercontent.com/ObligatorioArbeloRodriguez/Principal/main/Dockerfile
+                cd ${{inputs.app_name}}
+                if [[ "${{ inputs.app_name }}" == "be-orders" ]]; then
+                curl -H "Authorization: Bearer $GITHUB_TOKEN" \
+                -H "Accept: application/vnd.github.v3.raw" \
+                -o Dockerfile \
+                https://raw.githubusercontent.com/ObligatorioArbeloRodriguez/Principal/main/orders/Dockerfile
+                else
+                curl -H "Authorization: Bearer $GITHUB_TOKEN" \
+                -H "Accept: application/vnd.github.v3.raw" \
+                -o Dockerfile \
+                https://raw.githubusercontent.com/ObligatorioArbeloRodriguez/Principal/main/Dockerfile
+                fi
+                
 
-# probe con el dockerfile pasando a json:  DA mismo ERROR
-# https://api.github.com/repos/ObligatorioArbeloRodriguez/Principal/Dockerfile esto es lo que estaba antes, daba 404 not found ya que estabamos intentando tomar el DOCKERFILE como JSON
-
-# vi en internet que hay otra manera que seria haciendo un clone y tomando solo lo que se necesita, en este caso se haria:
-# git clone https://github.com/ObligatorioArbeloRodriguez/Principal.git
-#   cp Principal/Dockerfile .
-
-# codigo anterior:
- # | 
- # git clone https://github.com/ObligatorioArbeloRodriguez/Principal.git
- # cp Principal/Dockerfile .
-            
-      
       - name: Buildear imagen con nombre recibido
         run: |
-            docker build --build-arg APP_NAME=${{ inputs.app_name }} -t ${{ inputs.docker_image_name }} .
+            cd ${{inputs.app_name}}
+            docker build -t ${{ inputs.app_name }} .
+
       - name: Configurar credenciales para AWS
         uses: aws-actions/configure-aws-credentials@v1
         with:
-            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-            aws-region: ${{ secrets.AWS_REGION }}
+            aws-access-key-id: ${{ secrets.KEY-ID }}
+            aws-secret-access-key: ${{ secrets.ACCESS-KEY }}
+            aws-session-token: ${{ secrets.TOKEN }}
+            aws-region: us-east-1
+
       - name: Autenticarse en ECR
         uses: aws-actions/amazon-ecr-login@v1
       - name: Ponerle tag a imagen de Docker antes de subirla al repo de ECR
         run: |
-              REPO_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.app_name }}"
-              docker tag ${{ inputs.docker_image_name }}:latest $REPO_URI:latest
+              REPO_URI="${{ secrets.ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.nombre_repo_ecr }}"
+              docker tag ${{ inputs.app_name }}:latest $REPO_URI:latest
               echo "La imagen quedó con el siguiente tag: $REPO_URI:latest"
       - name: Pushear imagen docker a ECR
         run: |
-              REPO_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.app_name }}"
+              REPO_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.nombre_repo_ecr }}"
               docker push $REPO_URI:latest
 
   deploy_to_dev:
@@ -115,32 +134,48 @@ jobs:
     name: Hacer deploy a cluster de ambiente DEV
     runs-on: ubuntu-24.04
     steps:
+      - name: Configurar credenciales para AWS
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+            aws-access-key-id: ${{ secrets.KEY-ID }}
+            aws-secret-access-key: ${{ secrets.ACCESS-KEY }}
+            aws-session-token: ${{ secrets.TOKEN }}
+            aws-region: us-east-1
+
       - name: Actualizar servicio ECS en el cluster DEV
         run: |
-          CLUSTER_NAME=${{ inputs.ecs_cluster_name_dev }}
-          SERVICE_NAME=${{ inputs.ecs_service_name_dev }}
-          IMAGE_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.app_name }}:latest"
+          CLUSTER_NAME=${{ secrets.CLUSTER_DEV }}
+          SERVICE_NAME=${{ inputs.app_name }}-service-dev
+          IMAGE_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.nombre_repo_ecr }}:latest"
           aws ecs update-service \
             --cluster $CLUSTER_NAME \
             --service $SERVICE_NAME \
             --force-new-deployment \
-            --image $IMAGE_URI
+            --region us-east-1
 
   deploy_to_test:
     needs: deploy_to_dev
     name: Hacer deploy a cluster de ambiente TEST
     runs-on: ubuntu-24.04
     steps:
+      - name: Configurar credenciales para AWS
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+            aws-access-key-id: ${{ secrets.KEY-ID }}
+            aws-secret-access-key: ${{ secrets.ACCESS-KEY }}
+            aws-session-token: ${{ secrets.TOKEN }}
+            aws-region: us-east-1
+
       - name: Actualizar servicio ECS en el cluster TEST
         run: |
-          CLUSTER_NAME=${{ inputs.ecs_cluster_name_test }}
-          SERVICE_NAME=${{ inputs.ecs_service_name_test }}
-          IMAGE_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.app_name }}:latest"
+          CLUSTER_NAME=${{ secrets.CLUSTER_TEST }}
+          SERVICE_NAME=${{ inputs.app_name }}-service-test
+          IMAGE_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.nombre_repo_ecr }}:latest"
           aws ecs update-service \
             --cluster $CLUSTER_NAME \
             --service $SERVICE_NAME \
             --force-new-deployment \
-            --image $IMAGE_URI
+            --region us-east-1
 
   deploy_to_prod:
     needs: deploy_to_test
@@ -149,13 +184,21 @@ jobs:
     environment: 
       name: production
     steps:
-      - name: Update ECS service in Prod cluster
+      - name: Configurar credenciales para AWS
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+            aws-access-key-id: ${{ secrets.KEY-ID }}
+            aws-secret-access-key: ${{ secrets.ACCESS-KEY }}
+            aws-session-token: ${{ secrets.TOKEN }}
+            aws-region: us-east-1
+            
+      - name: Actualizar servicio ECS en el cluster PROD
         run: |
-          CLUSTER_NAME=${{ inputs.ecs_cluster_name_prod }}
-          SERVICE_NAME=${{ inputs.ecs_service_name_prod }}
-          IMAGE_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.app_name }}:latest"
+          CLUSTER_NAME=${{ secrets.CLUSTER_PROD }}
+          SERVICE_NAME=${{ inputs.app_name }}-service-prod
+          IMAGE_URI="${{ secrets.ACCOUNT_ID}}.dkr.ecr.us-east-1.amazonaws.com/${{ inputs.nombre_repo_ecr }}:latest"
           aws ecs update-service \
             --cluster $CLUSTER_NAME \
             --service $SERVICE_NAME \
             --force-new-deployment \
-            --image $IMAGE_URI  
+            --region us-east-1
