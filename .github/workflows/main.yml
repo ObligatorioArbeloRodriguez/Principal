@@ -31,10 +31,19 @@ on:
           required: true
         CLUSTER_PROD:
           required: true
-  
-        
-            
+     
 jobs:
+  loguear-aws:
+    name: Configurar credenciales para AWS
+    runs-on: ubuntu-24.04
+    steps:
+    -  uses: aws-actions/configure-aws-credentials@v1
+       with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+        aws-region: us-east-1
+
   sonarcloud:
     name: Análisis SonarCloud
     runs-on: ubuntu-24.04
@@ -77,7 +86,7 @@ jobs:
           fi
           echo "El quality gate fue pasado con éxito"
   docker_build_and_push:
-    needs: sonarcloud
+    needs: [sonarcloud, loguear-aws]
     name: Build de container docker
     runs-on: ubuntu-24.04
     steps:
@@ -109,14 +118,6 @@ jobs:
             cd ${{inputs.app_name}}
             docker build -t ${{ inputs.app_name }} .
 
-      - name: Configurar credenciales para AWS
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-            aws-access-key-id: ${{ secrets.KEY-ID }}
-            aws-secret-access-key: ${{ secrets.ACCESS-KEY }}
-            aws-session-token: ${{ secrets.TOKEN }}
-            aws-region: us-east-1
-
       - name: Autenticarse en ECR
         uses: aws-actions/amazon-ecr-login@v1
       - name: Ponerle tag a imagen de Docker antes de subirla al repo de ECR
@@ -130,18 +131,10 @@ jobs:
               docker push $REPO_URI:latest
 
   deploy_to_dev:
-    needs: docker_build_and_push
+    needs: [docker_build_and_push, loguear-aws]
     name: Hacer deploy a cluster de ambiente DEV
     runs-on: ubuntu-24.04
     steps:
-      - name: Configurar credenciales para AWS
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-            aws-access-key-id: ${{ secrets.KEY-ID }}
-            aws-secret-access-key: ${{ secrets.ACCESS-KEY }}
-            aws-session-token: ${{ secrets.TOKEN }}
-            aws-region: us-east-1
-
       - name: Actualizar servicio ECS en el cluster DEV
         run: |
           CLUSTER_NAME=${{ secrets.CLUSTER_DEV }}
@@ -154,18 +147,10 @@ jobs:
             --region us-east-1
 
   deploy_to_test:
-    needs: deploy_to_dev
+    needs: [deploy_to_dev, loguear-aws]
     name: Hacer deploy a cluster de ambiente TEST
     runs-on: ubuntu-24.04
     steps:
-      - name: Configurar credenciales para AWS
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-            aws-access-key-id: ${{ secrets.KEY-ID }}
-            aws-secret-access-key: ${{ secrets.ACCESS-KEY }}
-            aws-session-token: ${{ secrets.TOKEN }}
-            aws-region: us-east-1
-
       - name: Actualizar servicio ECS en el cluster TEST
         run: |
           CLUSTER_NAME=${{ secrets.CLUSTER_TEST }}
@@ -178,20 +163,12 @@ jobs:
             --region us-east-1
 
   deploy_to_prod:
-    needs: deploy_to_test
+    needs: [deploy_to_test, loguear-aws]
     name: Deploy a cluster de ambiente PROD
     runs-on: ubuntu-24.04
     environment: 
       name: production
-    steps:
-      - name: Configurar credenciales para AWS
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-            aws-access-key-id: ${{ secrets.KEY-ID }}
-            aws-secret-access-key: ${{ secrets.ACCESS-KEY }}
-            aws-session-token: ${{ secrets.TOKEN }}
-            aws-region: us-east-1
-            
+    steps:           
       - name: Actualizar servicio ECS en el cluster PROD
         run: |
           CLUSTER_NAME=${{ secrets.CLUSTER_PROD }}
