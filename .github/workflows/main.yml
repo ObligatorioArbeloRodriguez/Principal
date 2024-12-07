@@ -32,8 +32,7 @@ on:
           required: true
         CLUSTER_PROD:
           required: true
-env: 
-    Login_AWS: 
+
      
 jobs:
   loguear-aws:
@@ -46,6 +45,8 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
         aws-region: us-east-1
+
+## si bien lo hace, no funciona, la idea es no repetir codigo, ver como solucionarlo
 
   sonarcloud:
     name: Análisis SonarCloud
@@ -92,9 +93,14 @@ jobs:
     needs: sonarcloud
     name: Build de container docker
     runs-on: ubuntu-24.04
-    
     steps:
-
+      - name: Configurar credenciales para AWS
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.ACCESS-KEY }}
+            aws-session-token: ${{ secrets.TOKEN }}
+            aws-region: us-east-1
       - name: Clonar repo origen
         run: | 
              git clone https://github.com/ObligatorioArbeloRodriguez/${{inputs.app_name}}.git
@@ -102,7 +108,7 @@ jobs:
       - name: Download Dockerfile from Principal repository
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          uses: /workflows/auth.yml
+
         run: |
                 cd ${{inputs.app_name}}
                 if [[ "${{ inputs.app_name }}" == "be-orders" ]]; then
@@ -116,7 +122,6 @@ jobs:
                 -o Dockerfile \
                 https://raw.githubusercontent.com/ObligatorioArbeloRodriguez/Principal/main/Dockerfile
                 fi
-                
 
       - name: Buildear imagen con nombre recibido
         run: |
@@ -140,6 +145,13 @@ jobs:
     name: Hacer deploy a cluster de ambiente DEV
     runs-on: ubuntu-24.04
     steps:
+      - name: Configurar credenciales para AWS
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.ACCESS-KEY }}
+            aws-session-token: ${{ secrets.TOKEN }}
+            aws-region: us-east-1
       - name: Actualizar servicio ECS en el cluster DEV
         run: |
           CLUSTER_NAME=${{ secrets.CLUSTER_DEV }}
@@ -156,6 +168,13 @@ jobs:
     name: Hacer deploy a cluster de ambiente TEST
     runs-on: ubuntu-24.04
     steps:
+      - name: Configurar credenciales para AWS
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.ACCESS-KEY }}
+            aws-session-token: ${{ secrets.TOKEN }}
+            aws-region: us-east-1
       - name: Actualizar servicio ECS en el cluster TEST
         run: |
           CLUSTER_NAME=${{ secrets.CLUSTER_TEST }}
@@ -174,6 +193,13 @@ jobs:
     environment: 
       name: production
     steps:           
+      - name: Configurar credenciales para AWS
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.ACCESS-KEY }}
+            aws-session-token: ${{ secrets.TOKEN }}
+            aws-region: us-east-1
       - name: Actualizar servicio ECS en el cluster PROD
         run: |
           CLUSTER_NAME=${{ secrets.CLUSTER_PROD }}
