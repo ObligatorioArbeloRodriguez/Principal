@@ -1,11 +1,11 @@
 ﻿
-![banner]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/Banner.jpeg])
+![banner](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/Banner.jpeg)
 
 # **OBLIGATORIO \- Certificado en DevOps (Electiva)**
 **Analista en Tecnologías de la Información**
-  ![foto fran]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/Fran.jpeg])
+  ![foto fran](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/Fran.jpeg)
 FRANCISCO RODRIGUEZ (299896)
-![foto lucas]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/Lucas.jpeg])LUCAS ARBELO (300805)     
+![foto lucas](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/Lucas.jpeg)LUCAS ARBELO (300805)     
 
 
 **Docente: Federico Barceló**
@@ -89,15 +89,15 @@ Se buscará fomentar la innovación, la adopción de tecnologías modernas y pro
 La estrategia utilizada se basó en la rúbrica que nos planteó el profesor en clase, realizando sprints semanales para lograr los objetivos a tiempo.
 
 Sprint 1 (captura del 15/11):  
-![sprint1]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/Sprint1.png])
+![sprint1](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/Sprint1.png)
 Sprint 2 (captura del 20/11):  
-![sprint2]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/Sprint2.jpeg])
+![sprint2](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/Sprint2.jpeg)
 
 Sprint 3 (captura del 26/11):
-![sprint3]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/Sprint3.png])
+![sprint3](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/Sprint3.png)
 
 Sprint 4 (captura del 9/12):
-![sprint4]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/Sprint4.jpeg])
+![sprint4](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/Sprint4.jpeg)
 
 >*Nota: Al haber cerrado los sprints anteriores, no mostramos el progreso en ellos, pero las tareas correspondientes a cada sprint previo fueron finalizadas.*
 
@@ -132,7 +132,7 @@ Posteriormente, y ante problemas de conexion entre ECR y ECS, investigamos y vim
 Se crearon tres **bucketsS3**  con políticas de no bloquear acceso publico y habilitar contenido estático.
 
 Evidencia de funcionamiento de TF:  
-![terraform1]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/terraform1.jpg])![terraform2]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/terraform2.jpg])![terraform3]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/terraform3.jpg])![terraform4]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/terraform4.jpg])![Lambda]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/Lambda.jpeg])
+![terraform1](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/terraform1.jpg])![terraform2]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/terraform2.jpg])![terraform3]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/terraform3.jpg])![terraform4]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/terraform4.jpg])![Lambda]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/Lambda.jpeg)
 
 
 ## Estrategia de ramas:
@@ -144,7 +144,7 @@ En estos esquemas, se trabaja con una rama principal (main) que es la única des
 Se vale de ramas efímeras que se van integrando a la rama principal una vez las funcionalidades que presentan se consideran finalizadas. 
 >Optamos por este esquema porque, al estar la empresa transicionando a estas nuevas metodologías, nos pareció más fácil de entender e incorporar, dándole a los miembros de equipo la posibilidad de familiarizarse con el trabajo colaborativo en repositorios. En caso de decidirse a futuro pasar a un esquema más complejo como GitFlow, el equipo ya tendrá conocimientos mayores y podrá hacerlo con menor dificultad y mayor tasa de éxito.  
 
-![TrunkbaseCODE]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/TrunkbaseCODE.png])
+![TrunkbaseCODE](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/TrunkbaseCODE.png)
 
 En el repositorio DevOps, optamos por un esquema **TRUNK-BASED** también.
 
@@ -155,7 +155,7 @@ Debido a esto, no nos pareció necesaria una estructura más compleja y orientad
 >Además, se utilizó un esquema de **feature-branch** en el que se desarrollan las nuevas funcionalidades en ramas específicas, que luego deben ser integradas a la rama principal mediante pull requests que impliquen aprobación de otros miembros del equipo.
  Esto permite una verificación cruzada y aumenta la calidad del trabajo final. 
 
-![TrunkbaseDEVOPS]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/TrunkbaseDEVOPS.png])
+![TrunkbaseDEVOPS](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/TrunkbaseDEVOPS.png)
 
 ## Pipelines y procesos:
 
@@ -177,7 +177,7 @@ En los tres ambientes, se incluye un API Gateway que cumple la función de ser e
 
 >Se optó por manejar un cluster de ECS por ambiente (dev, test y prod). Cada cluster cuenta con un servicio (Service) correspondiente a cada aplicativo, que contará con una Task Definition para disponibilizar el aplicativo en contenedores, monitorear su estado, su carga y su tráfico, escalando horizontalmente par tolerar una mayor o menor demanda mediante políticas de autoscaling predefinidas.   
 
-![CICD_BE.png]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/CICD_BE.png])
+![CICD_BE.png](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/CICD_BE.png)
 
 Aplicativo Frontend React:
 
@@ -193,7 +193,7 @@ NOTA: *El archivo .yml utilizado por el pipeline de frontend no fue ubicado en e
 
 5. Se pedirá aprobación manual, y, cuando se otorgue, se realizará el despliegue al S3 bucket correspondiente al ambiente de producción.
 
-![CICD_FE.png]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/CICD_FE.png])
+![CICD_FE.png](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/CICD_FE.png)
 
 ##  Herramientas de Testing
 
@@ -207,9 +207,9 @@ A continuación se muestran los resultados obtenidos:
 
 Como se ve en las imágenes, el aplicativo FrontEnd pasa por tests, mostrando 26 puntos de mejora, pero ninguno de ellos reviste mayor severidad. La práctica totalidad de los puntos mejorables refieren a la mantenibilidad de la aplicación y aspectos de consistencia en lo que refiere a prácticas de Clean Code.  
 
-![FESonar1]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/FESonar1.jpeg])
-![FESonar2]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/FESonar2.jpeg])
-![FESonar3]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/FESonar3.jpeg])
+![FESonar1](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/FESonar1.jpeg)
+![FESonar2](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/FESonar2.jpeg)
+![FESonar3](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/FESonar3.jpeg)
 #### BACKEND:
 
 Con respecto a los aplicativos de backend, todos pasan el Quality Gate por defecto de SonarCloud, mostrando puntos de mejora bastante similares. Se encontraron algunos problemas menores como malas prácticas de formateo o métodos que devuelven vacío en caso de no cumplirse un condicional (no hacen nada). En todos los aplicativos se detectaron algunos problemas de seguridad de baja importancia, como el logging innecesario de datos del usuario. 
@@ -217,30 +217,30 @@ Con respecto a los aplicativos de backend, todos pasan el Quality Gate por defec
     ORDERS:
 
 
-![OrdersSonar1.jpeg]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/OrdersSonar1.jpeg])
-![OrdersSonar2.jpeg]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/OrdersSonar2.jpeg])
-![OrdersSonar3.jpeg]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/OrdersSonar3.jpeg])
+![OrdersSonar1.jpeg](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/OrdersSonar1.jpeg)
+![OrdersSonar2.jpeg](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/OrdersSonar2.jpeg)
+![OrdersSonar3.jpeg](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/OrdersSonar3.jpeg)
 
     PAYMENTS
 
-![PaymentsSonar1]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/PaymentsSonar1.jpeg])
-![PaymentsSonar2]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/PaymentsSonar2.jpeg])
+![PaymentsSonar1](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/PaymentsSonar1.jpeg)
+![PaymentsSonar2](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/PaymentsSonar2.jpeg)
 
     PRODUCTS
 
-![ProductsSonar1.jpeg]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/ProductsSonar1.jpeg])
+![ProductsSonar1.jpeg](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/ProductsSonar1.jpeg)
 
     SHIPPING
 
-![ShippingSonar1.jpeg]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/ShippingSonar1.jpeg])
-![ShippingSonar2.jpeg]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/ShippingSonar2.jpeg])
+![ShippingSonar1.jpeg](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/ShippingSonar1.jpeg)
+![ShippingSonar2.jpeg](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/ShippingSonar2.jpeg)
 
 ###  Test Selenium 
 
 Los test de selenium, los usamos para el aplicativo FE, el cual consiste en una prueba de UI.  
 El mismo está incluido en el Pipeline de GH Actions.
 
-![selenium pipeline]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/selenium%20pipeline.jpg])
+![selenium pipeline](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/selenium%20pipeline.jpg)
 
 ![selenium código](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/selenium%20test.png)
 
