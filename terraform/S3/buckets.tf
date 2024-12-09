@@ -56,7 +56,7 @@ resource "aws_s3_bucket_notification" "my_bucket_notification" {
 
 resource "aws_lambda_function" "notify_lambda" {
 
-  function_name = "notificador-a-prod"
+  function_name = "notificador-a-${var.environment}"
   filename      = "S3/lambda_function.zip"
   handler       = "lambda_function.lambda_handler"
   runtime       = "python3.9"
