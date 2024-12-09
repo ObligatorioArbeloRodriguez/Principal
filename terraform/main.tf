@@ -26,6 +26,7 @@ module "networking" {
 module "S3" {
     source = "./S3"
     environment = var.environment
+    accountid =  var.accountid
 }
 
 
