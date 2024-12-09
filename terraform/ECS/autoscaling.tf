@@ -1,4 +1,4 @@
-# Auto Scaling Target y Policy para Orders
+
 resource "aws_appautoscaling_target" "be-orders" {
   max_capacity       = 10
   min_capacity       = 1
@@ -29,7 +29,7 @@ resource "aws_appautoscaling_policy" "scaling_be-orders" {
   }
 }
 
-# Auto Scaling Target y Policy para Products
+
 resource "aws_appautoscaling_target" "be-products" {
   max_capacity       = 10
   min_capacity       = 1
@@ -52,7 +52,7 @@ resource "aws_appautoscaling_policy" "scaling_be-products" {
   service_namespace  = "ecs"
 
   target_tracking_scaling_policy_configuration {
-    target_value = 50.0  # Ajusta según el objetivo deseado
+    target_value = 50.0  
     predefined_metric_specification {
       predefined_metric_type = "ECSServiceAverageCPUUtilization"
     }
@@ -82,7 +82,7 @@ resource "aws_appautoscaling_policy" "scaling_be-shipping" {
   service_namespace  = "ecs"
 
   target_tracking_scaling_policy_configuration {
-    target_value = 50.0  # Ajusta según el objetivo deseado
+    target_value = 50.0 
     predefined_metric_specification {
       predefined_metric_type = "ECSServiceAverageCPUUtilization"
     }
@@ -111,7 +111,7 @@ resource "aws_appautoscaling_policy" "scaling_be-payments" {
   service_namespace  = "ecs"
 
   target_tracking_scaling_policy_configuration {
-    target_value = 50.0  # Ajusta según el objetivo deseado
+    target_value = 50.0
     predefined_metric_specification {
       predefined_metric_type = "ECSServiceAverageCPUUtilization"
     }

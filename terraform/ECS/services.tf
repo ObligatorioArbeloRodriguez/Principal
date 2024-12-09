@@ -14,7 +14,7 @@ resource "aws_ecs_service" "be-orders" {
   network_configuration {
     subnets         = var.subnets
     security_groups = var.security_groups
-    assign_public_ip = false
+    assign_public_ip = true
   }
 
   load_balancer {
@@ -45,7 +45,7 @@ resource "aws_ecs_service" "be-payments" {
   network_configuration {
     subnets         = var.subnets
     security_groups = var.security_groups
-    assign_public_ip = false
+    assign_public_ip = true
   }
 
   load_balancer {
@@ -76,7 +76,7 @@ resource "aws_ecs_service" "be-shipping" {
   network_configuration {
     subnets         = var.subnets
     security_groups = var.security_groups
-    assign_public_ip = false
+    assign_public_ip = true
   }
 
   load_balancer {
@@ -107,7 +107,7 @@ resource "aws_ecs_service" "be-products" {
   network_configuration {
     subnets         = var.subnets
     security_groups = var.security_groups
-    assign_public_ip = false
+    assign_public_ip = true
   }
 
   load_balancer {
