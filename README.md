@@ -3,9 +3,8 @@
 
 # **OBLIGATORIO \- Certificado en DevOps (Electiva)**
 **Analista en Tecnologías de la Información**
-  ![foto fran](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/Fran.jpeg)
-FRANCISCO RODRIGUEZ (299896)
-![foto lucas](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/Lucas.jpeg)LUCAS ARBELO (300805)     
+
+FRANCISCO RODRIGUEZ (299896) - LUCAS ARBELO (300805)     
 
 
 **Docente: Federico Barceló**
@@ -132,6 +131,7 @@ Posteriormente, y ante problemas de conexion entre ECR y ECS, investigamos y vim
 Se crearon tres **bucketsS3**  con políticas de no bloquear acceso publico y habilitar contenido estático.
 
 Evidencia de funcionamiento de TF:  
+
 ![terraform1](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/terraform1.jpg])![terraform2]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/terraform2.jpg])![terraform3]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/terraform3.jpg])![terraform4]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/terraform4.jpg])![Lambda]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/Lambda.jpeg)
 
 
@@ -281,7 +281,8 @@ Adicionalmente, lo usamos para:
 - Creación de repositorios ECR   
 - Ajustes en el load balancer y resolver si utilizábamos uno por ambiente (como definimos finalmente) o un load balancer por aplicativo.   
 - Manejo de target groups y configuración de security groups.  
-- Organización de archivos .tf. Ejemplo: ![GPT5.jpeg](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/GPT5.jpeg)
+- Organización de archivos .tf. Ejemplo:
+  ![GPT5.jpeg](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/GPT5.jpeg)
 - entendimiento de diferencias entre EKS y ECS, ejemplo:
 
 ![GPT6.jpeg](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/GPT6.jpeg)
