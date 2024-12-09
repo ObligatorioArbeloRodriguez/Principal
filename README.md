@@ -132,7 +132,15 @@ Se crearon tres **bucketsS3**  con políticas de no bloquear acceso publico y ha
 
 Evidencia de funcionamiento de TF:  
 
-![terraform1](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/terraform1.jpg])![terraform2]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/terraform2.jpg])![terraform3]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/terraform3.jpg])![terraform4]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/terraform4.jpg])![Lambda]([https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/Lambda.jpeg)
+![terraform1](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/terraform1.jpg)
+
+![terraform2](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/terraform2.jpg)
+
+![terraform3](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/terraform3.jpg)
+
+![terraform4](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/terraform4.jpg)
+
+![Lambda](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/Lambda.jpeg)
 
 
 ## Estrategia de ramas:
