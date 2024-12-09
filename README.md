@@ -108,7 +108,9 @@ Se utilizó la documentación provista por Hashicorp para manejar la configuraci
 
 Se crearon cuatro **repositorios de ECR**, uno por aplicativo. 
 
->NOTA: Se utilizó **Terraform Workspaces** para poder crear las infraestructuras para los tres ambientes, pero utilizando variables simples para no crear archivos .tfvars. Por esta razón, se implementó un chequeo mediante el cual se crearán los ECRs solamente si se está en el workspace default. Nuestro flujo de trabajo implica crear la infra de DEV en el workspace default, luego crear un workspace “test” para crear la infra del ambiente TEST y luego pasar a un workspace “prod” para crear la infra del ambiente PROD (los nombres de los workspaces pueden variar, el único que se chequea es “default”, que debe ser usado para alguno de los ambientes, pues, como se aclaró, es cuando se crean los repositorios ECR. 
+>NOTA: Se utilizó **Terraform Workspaces** para poder crear las infraestructuras para los tres ambientes, pero utilizando variables simples para no crear archivos .tfvars. Por esta razón, se implementó un chequeo mediante el cual se crearán los ECRs solamente si se está en el workspace default. Nuestro flujo de trabajo implica crear la infra de DEV en el workspace default, luego crear un workspace “test” para crear la infra del ambiente TEST y luego pasar a un workspace “prod” para crear la infra del ambiente PROD (los nombres de los workspaces pueden variar, el único que se chequea es “default”, que debe ser usado para alguno de los ambientes, pues, como se aclaró, es cuando se crean los repositorios ECR.
+>Adicionalmente, para facilitar la creación de recursos, se pide el ACCOUNT ID cada vez que se hace un apply, para que se generen con esas credenciales
+
 
 Se crearon tres **clusters** para alojar los aplicativos de backend (un cluster por ambiente).
 
@@ -268,14 +270,13 @@ Ejemplo:
       
   En Terraform se usó con más intensidad. 
 
-> diseño de API gateway:
-
+> diseño de API gateway
+> (luego de pasarle nuestro API GATEWAY:):
 ![GPT2.jpeg](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/GPT2.jpeg)
 
 ![GPT3.jpeg](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/GPT3.jpeg)
-> (luego de pasarle nuestro API GATEWAY:):
 
-![GPT4.jpeg](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/GPT4.jpeg)
+
 En este caso lo utilizamos para validar nuestra solución. Si bien nos recomendó utilizar dos resources de api gateway para products (porque puede recibir un parametro de ID producto), optamos por dejar un solo GET. 
 
 Adicionalmente, lo usamos para:
@@ -290,9 +291,10 @@ Adicionalmente, lo usamos para:
 - Ajustes en el load balancer y resolver si utilizábamos uno por ambiente (como definimos finalmente) o un load balancer por aplicativo.   
 - Manejo de target groups y configuración de security groups.  
 - Organización de archivos .tf. Ejemplo:
-  ![GPT5.jpeg](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/GPT5.jpeg)
+![GPT4.jpeg](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/GPT4.jpeg)
 - entendimiento de diferencias entre EKS y ECS, ejemplo:
 
+  ![GPT5.jpeg](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/GPT5.jpeg)
 ![GPT6.jpeg](https://github.com/ObligatorioArbeloRodriguez/Principal/blob/main/images/GPT6.jpeg)
 
 >NOTA: No se adjuntan capturas de todos los usos que se le dió para no generar un archivo tan extenso con elementos que no aportan demasiado. 
